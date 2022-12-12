@@ -40,7 +40,7 @@ const add = (thing) => {
 	container.push(thing.view)
 }
 
-const animate = () => {
+const render = () => {
 	for (let i = 0; i < container.length; i++) {
 		const view = container[i]
 
@@ -50,5 +50,5 @@ const animate = () => {
 
 export default {
 	add,
-	animate,
+	render,
 }
