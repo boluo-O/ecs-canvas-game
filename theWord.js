@@ -13,10 +13,12 @@ const addObject = (thing) => {
 
 const cacheKeydown = () => {
     window.addEventListener('keydown', (e) => {
+        e.preventDefault()
 		const key = e.key
 		keydowns[key] = true
 	})
 	window.addEventListener('keyup', (e) => {
+        e.preventDefault()
 		const key = e.key
 		keydowns[key] = false
 	})
@@ -30,6 +32,10 @@ const watchKeyEvents = () => {
             keyboardEventsTable[key]()
         }
     }
+}
+
+const clearCanvas = () => {
+	canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height)
 }
 
 export const registerKeyboardEvents = (key, callback) => {
@@ -48,13 +54,14 @@ export const theWorld = (selector) => {
 
     cacheKeydown()
 
-	const run = () => {
+	const start = () => {
+        clearCanvas()
 		viewSystem.run()
 
         watchKeyEvents()
 
-		window.requestAnimationFrame(run)
+		window.requestAnimationFrame(start)
 	}
 
-	run()
+	start()
 }
