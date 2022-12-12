@@ -2,66 +2,59 @@ import Rect from './Rect.js'
 import viewSystem from './viewSystem.js'
 import moveSystem from './move.js'
 
-const register = (thing) => {
+const keydowns = {}
+const keyboardEventsTable = {}
+
+const addObject = (thing) => {
 	if (thing.view) {
 		viewSystem.add(thing)
 	}
 }
 
+const cacheKeydown = () => {
+    window.addEventListener('keydown', (e) => {
+		const key = e.key
+		keydowns[key] = true
+	})
+	window.addEventListener('keyup', (e) => {
+		const key = e.key
+		keydowns[key] = false
+	})
+}
 
+const watchKeyEvents = () => {
+    const keys = Object.keys(keyboardEventsTable)
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        if (keydowns[key]) {
+            keyboardEventsTable[key]()
+        }
+    }
+}
 
-const keydowns = {}
+export const registerKeyboardEvents = (key, callback) => {
+	keyboardEventsTable[key] = callback
+}
 
-const theWorld = (selector) => {
+export const theWorld = (selector) => {
 	const canvasCtx = document.querySelector(selector).getContext('2d')
 	window.canvasCtx = canvasCtx
 	const rect = Rect()
 
-	register(rect)
+	addObject(rect)
 	if (rect.move) {
 		moveSystem(rect)
 	}
-    const speed = 5
-    const keyboardEventsTable = {
-        'ArrowRight': () => {
-            rect.view.existence.x += speed
-        },
-        'ArrowLeft': () => {
-            rect.view.existence.x -= speed
-        },
-        'ArrowUp': () => {
-            rect.view.existence.y -= speed
-        },
-        'ArrowDown': () => {
-            rect.view.existence.y += speed
-        },
-    }
 
-    window.addEventListener('keydown', (e) => {
-        const key = e.key
-        keydowns[key] = true
-    })
-    window.addEventListener('keyup', (e) => {
-        const key = e.key
-        keydowns[key] = false
-    })
+    cacheKeydown()
 
 	const run = () => {
 		viewSystem.run()
 
-        const keys = Object.keys(keyboardEventsTable)
-        for (let i = 0; i < keys.length; i++) {
-            const key = keys[i]
-            if(keydowns[key]) {
-                // 如果按键被按下, 调用注册的 action
-                keyboardEventsTable[key]()
-            }
-        }
+        watchKeyEvents()
 
 		window.requestAnimationFrame(run)
 	}
 
 	run()
 }
-
-export default theWorld

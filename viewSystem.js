@@ -6,8 +6,8 @@ const renderView = (view) => {
 		image: () => {
 			const img = new Image()
 			img.src = view.src
+
 			img.onload = () => {
-				// console.log('draw')
 				clearCanvas()
 				canvasCtx.drawImage(img, view.existence.x, view.existence.y)
 			}
@@ -56,21 +56,6 @@ const run = () => {
 	}
 	// clearCanvas()
 }
-
-// const run = () => {
-//     setInterval(() => {
-//         const _run = () => {
-//             for (let i = 0; i < container.length; i++) {
-//                 const thing = container[i]
-//                 // thing && console.log(thing.view.existence.x)
-//                 renderView(thing.view)
-//             }
-//             // clearCanvas()
-//         }
-
-//         _run()
-//     }, 1000 / 140)
-// }
 
 export default {
 	add,

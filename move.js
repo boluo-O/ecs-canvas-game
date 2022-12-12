@@ -1,25 +1,27 @@
-const keyboardEventsTable = {
-    'ArrowRight': () => {
-        thing.view.existence.x += speed
-    },
-    'ArrowLeft': () => {
-        thing.view.existence.x -= speed
-    },
-    'ArrowUp': () => {
-        thing.view.existence.y -= speed
-    },
-    'ArrowDown': () => {
-        thing.view.existence.y += speed
-    },
-}
-
-const keyDown = {}
+import { registerKeyboardEvents } from './theWord.js'
 
 const move = (thing) => {
+	const { view } = thing
 	const speed = 10
-	console.log('thing', thing)
 
-
+	const keyboardEventsTable = {
+		ArrowRight: () => {
+			view.existence.x += speed
+		},
+		ArrowLeft: () => {
+			view.existence.x -= speed
+		},
+		ArrowUp: () => {
+			view.existence.y -= speed
+		},
+		ArrowDown: () => {
+			view.existence.y += speed
+		},
+	}
+	for (const key in keyboardEventsTable) {
+		const callback = keyboardEventsTable[key]
+		registerKeyboardEvents(key, callback)
+	}
 }
 
 export default move

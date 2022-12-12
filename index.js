@@ -1,4 +1,4 @@
-import theWorld from "./theWord.js"
+import { theWorld } from './theWord.js'
 
 const template = () => {
 	let x = 10
@@ -60,7 +60,8 @@ const template = () => {
 }
 
 const __main = () => {
-    theWorld('#ecs-game-container')
+	theWorld('#ecs-game-container')
+	// theWorld()
 }
 
 __main()
