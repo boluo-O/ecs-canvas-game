@@ -6,8 +6,8 @@ const Rect = () => {
             src: './rect.png',
             hide: false,
             existence: {
-                x: 10,
-                y: 10,
+                x: 100,
+                y: 100,
             },
         },
         move: {

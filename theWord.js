@@ -61,6 +61,7 @@ export const theWorld = (selector) => {
 	}
 
     cacheKeydown()
+    console.log('canvasCtx', canvasCtx.canvas.width)
 
 	const start = (TIME) => {
         // think 如果利用类似react的diff算法重绘canvas性能会更好吗
@@ -75,9 +76,9 @@ export const theWorld = (selector) => {
         LAST_FRAME_TIME = TIME
  
 
+        watchKeyEvents()
 		viewSystem.animate()
 
-        watchKeyEvents()
 
 		window.requestAnimationFrame(start)
 	}
