@@ -29,14 +29,15 @@ const add = (thing) => {
 	container.push(thing.view)
 }
 
-const run = () => {
+const animate = () => {
 	for (let i = 0; i < container.length; i++) {
 		const view = container[i]
+
 		renderView(view)
 	}
 }
 
 export default {
 	add,
-	run,
+	animate,
 }

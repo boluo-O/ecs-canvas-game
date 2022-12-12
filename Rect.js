@@ -4,7 +4,7 @@ const Rect = () => {
         view: {
             type: 'image',
             src: './rect.png',
-            show: true,
+            hide: false,
             existence: {
                 x: 10,
                 y: 10,
