@@ -1,9 +1,9 @@
-import { registerKeyboardEvents } from './theWord.js'
+import { registerKeyboardEvents } from '../theWord.js'
 
 // 移动
 // 上下左右移动
 
-const move = (thing) => {
+const moveSystem = (thing) => {
 	const { view } = thing
 	const speed = 10
 
@@ -27,4 +27,4 @@ const move = (thing) => {
 	}
 }
 
-export default move
+export default moveSystem
