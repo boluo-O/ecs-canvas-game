@@ -43,7 +43,6 @@ const add = (thing) => {
 const render = () => {
 	for (let i = 0; i < container.length; i++) {
 		const view = container[i]
-
 		renderView(view)
 	}
 }

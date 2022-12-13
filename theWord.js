@@ -61,6 +61,12 @@ const FPS = () => {
             canvasCtx.fillStyle = "Green";
             canvasCtx.font      = "normal 16pt Arial";
             canvasCtx.fillText(fps + " fps", 10, 26);
+        },
+        getFps: () => {
+          return fps  
+        },
+        limit: (maxFps) => {
+            
         }
     }
 }
@@ -77,21 +83,19 @@ export const theWorld = (selector) => {
 	}
 
     cacheKeydown()
-
+// 111111111
 	const start = (TIME) => {
         // think 如果利用类似react的diff算法重绘canvas性能会更好吗
         clearCanvas()   
-        
-        // FPS 计算
+        // keybord Events watch 抽出输入事件系统？
+        watchKeyEvents()
+        // FPS
         fps.tick(TIME)
         fps.show()
+        // render view
+        viewSystem.render()
 
-        watchKeyEvents()
-		viewSystem.render()
-
-
-		window.requestAnimationFrame(start)
+        window.requestAnimationFrame(start)
 	}
-
 	start()
 }
