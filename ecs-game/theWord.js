@@ -7,12 +7,13 @@ const keyboardEventsTable = {}
 const cacheKeydown = () => {
 	window.addEventListener('keydown', (e) => {
 		e.preventDefault()
-		const key = e.key
+		const key = e.code
+		// console.log('e', e)
 		keydowns[key] = true
 	})
 	window.addEventListener('keyup', (e) => {
 		e.preventDefault()
-		const key = e.key
+		const key = e.code
 		keydowns[key] = false
 	})
 }
@@ -65,10 +66,10 @@ const FPS = () => {
 
 const createObject = (thing) => {
 	if (thing.view) {
-		viewSystem.add(thing)
+		viewSystem.load(thing)
 	}
 	if (thing.move) {
-		moveSystem(thing)
+		moveSystem.load(thing)
 	}
 	return thing
 }
@@ -94,7 +95,7 @@ export const theWorld = (selector) => {
 		// viewSystem
 		viewSystem.render()
 
-		
+		moveSystem.run()
 
 		window.requestAnimationFrame(start)
 	}

@@ -36,7 +36,7 @@ const renderView = (view) => {
 	renderTable[type]()
 }
 
-const add = (thing) => {
+const load = (thing) => {
 	container.push(thing.view)
 }
 
@@ -48,6 +48,6 @@ const render = () => {
 }
 
 export default {
-	add,
+	load,
 	render,
 }
