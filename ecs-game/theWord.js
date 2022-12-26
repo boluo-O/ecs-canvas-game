@@ -1,43 +1,7 @@
-import viewSystem from './system/viewSystem.js'
-import moveSystem from './system/moveSystem.js'
+import ViewSystem from './system/viewSystem.js'
+import MoveSystem from './system/moveSystem.js'
 
-const keydowns = {}
-const keyboardEventsTable = {}
-
-const cacheKeydown = () => {
-	window.addEventListener('keydown', (e) => {
-		e.preventDefault()
-		const key = e.code
-		// console.log('e', e)
-		keydowns[key] = true
-	})
-	window.addEventListener('keyup', (e) => {
-		e.preventDefault()
-		const key = e.code
-		keydowns[key] = false
-	})
-}
-
-const watchKeyEvents = (cacheKeydown) => {
-	// const { keydowns, keyboardEventsTable } = cacheKeydown
-	const keys = Object.keys(keyboardEventsTable)
-	for (let i = 0; i < keys.length; i++) {
-		const key = keys[i]
-		if (keydowns[key]) {
-			keyboardEventsTable[key]()
-		}
-	}
-}
-
-const clearCanvas = () => {
-	canvasCtx.clearRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height)
-}
-
-export const registerKeyboardEvents = (key, callback) => {
-	keyboardEventsTable[key] = callback
-}
-
-const FPS = () => {
+const FPS = (canvasCtx) => {
 	let fps = 0
 	let LAST_FRAME_TIME = 0
 	let LAST_SHOW_FPS_TIME = 0
@@ -64,44 +28,83 @@ const FPS = () => {
 	}
 }
 
-const createObject = (thing) => {
-	if (thing.view) {
-		viewSystem.load(thing)
+export default class TheWorld {
+	constructor({ selector }) {
+		this.canvasCtx = document.querySelector(selector).getContext('2d')
+		this.fps = FPS(this.canvasCtx)
+		this.keydowns = {}
+		this.keyboardEventsTable = {}
+		this.viewSystem = new ViewSystem(this.canvasCtx)
+		this.moveSystem = new MoveSystem(
+			this.canvasCtx,
+			this.registerKeyboardEvents
+		)
+		this.cacheKeydown()
+		this.start()
 	}
-	if (thing.move) {
-		moveSystem.load(thing)
+
+	cacheKeydown() {
+		window.addEventListener('keydown', (e) => {
+			e.preventDefault()
+			const key = e.code
+			this.keydowns[key] = true
+		})
+		window.addEventListener('keyup', (e) => {
+			e.preventDefault()
+			const key = e.code
+			this.keydowns[key] = false
+		})
 	}
-	return thing
-}
 
-export const theWorld = (selector) => {
-	const canvasCtx = document.querySelector(selector).getContext('2d')
-	window.canvasCtx = canvasCtx
-	const fps = FPS()
+	watchKeyEvents(cacheKeydown) {
+		const keys = Object.keys(this.keyboardEventsTable)
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i]
+			if (this.keydowns[key]) {
+				this.keyboardEventsTable[key]()
+			}
+		}
+	}
 
-	cacheKeydown()
+	registerKeyboardEvents = (key, callback) => {
+		this.keyboardEventsTable[key] = callback
+	}
 
-	const start = (TIME) => {
+	createObject(thing) {
+		if (thing.view) {
+			this.viewSystem.load(thing)
+		}
+		if (thing.move) {
+			this.moveSystem.load(thing)
+		}
+		return thing
+	}
+
+	clearCanvas() {
+		this.canvasCtx.clearRect(
+			0,
+			0,
+			this.canvasCtx.canvas.width,
+			this.canvasCtx.canvas.height
+		)
+	}
+
+	start = (TIME) => {
 		// think 如果利用类似react的diff算法重绘canvas性能会更好吗
-		clearCanvas()
+		this.clearCanvas()
 
 		// keybord Events watch 抽出输入事件系统？
-		watchKeyEvents(cacheKeydown)
+		this.watchKeyEvents(this.cacheKeydown)
 
 		// FPS 也许有更好的实现，现在感觉和oop没啥区别
-		fps.tick(TIME)
-		fps.show()
+		this.fps.tick(TIME)
+		this.fps.show()
 
 		// viewSystem
-		viewSystem.render()
+		this.viewSystem.render()
 
-		moveSystem.run()
+		// moveSystem.run()
 
-		window.requestAnimationFrame(start)
-	}
-	start()
-
-	return {
-		createObject,
+		window.requestAnimationFrame(this.start)
 	}
 }
