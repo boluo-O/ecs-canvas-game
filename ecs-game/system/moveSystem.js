@@ -1,24 +1,19 @@
-// import { registerKeyboardEvents } from '../theWord.js'
-
-// 移动
-// 上下左右移动
 export default class MoveSystem {
 	constructor(canvasCtx, registerKeyboardEvents) {
 		this.canvasCtx = canvasCtx
 		this.registerKeyboardEvents = registerKeyboardEvents
 		this.container = []
 		this.speed = 0
+		this.g = 1
 	}
 
 	load(thing) {
 		const { view } = thing
 		this.container.push(thing)
 		const speed = 10
-		const g = 1
 
 		const keyboardEventsTable = {
 			ArrowRight: () => {
-				console.log('right')
 				view.existence.x += speed
 			},
 			ArrowLeft: () => {
@@ -30,29 +25,7 @@ export default class MoveSystem {
 			ArrowDown: () => {
 				view.existence.y += speed
 			},
-			Space: () => {
-				// console.log('jump')
-				// let jumpSpeed = 10
-				// const originY = view.existence.y
-				// view.existence.y -= jumpSpeed
-				// jumpSpeed -= g
-				thing.move.speedY = 10
-				thing.move.originY = view.existence.y
-				// while (originY > view.existence.y) {
-
-				// 	jumpSpeed -= g
-				// }
-				// console.log('originY', originY)
-				// console.log('view.existence.y',view.existence.y )
-				// setTimeout(() => {
-				// 	console.log('jumpSpeed', jumpSpeed)
-				// 	// while (jumpSpeed <= 0 && (originY > view.existence.y)) {
-				// 	// 	view.existence.y -= jumpSpeed
-				// 	// 	jumpSpeed -= g
-				// 	// }
-
-				// }, 0)
-			},
+			Space: () => {},
 		}
 		for (const key in keyboardEventsTable) {
 			const callback = keyboardEventsTable[key]

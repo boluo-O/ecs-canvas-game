@@ -93,17 +93,16 @@ export default class TheWorld {
 		// think 如果利用类似react的diff算法重绘canvas性能会更好吗
 		this.clearCanvas()
 
-		// keybord Events watch 抽出输入事件系统？
+		// 键盘事件 （抽出事件系统？）
 		this.watchKeyEvents(this.cacheKeydown)
 
 		// FPS 也许有更好的实现，现在感觉和oop没啥区别
 		this.fps.tick(TIME)
 		this.fps.show()
 
-		// viewSystem
 		this.viewSystem.render()
 
-		// moveSystem.run()
+		this.moveSystem.run()
 
 		window.requestAnimationFrame(this.start)
 	}
