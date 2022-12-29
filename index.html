@@ -7,17 +7,19 @@
 		<title>Document</title>
 		<style>
 			body {
-                display: flex;
-                justify-content: center;
+				display: flex;
+				justify-content: center;
 			}
 			canvas {
 				background: wheat;
 			}
 		</style>
 	</head>
-	<canvas id="ecs-game-container" width="1000" height="800"></canvas>
-	<div></div>
 	<body>
+		<canvas class="test" width="1000" height="800"></canvas>
+		<div class="ecs-game-container"></div>
+		<div id="root"></div>
 		<script type="module" src="./index.js"></script>
+		<!-- <script type="module" src="/src/main.tsx"></script> -->
 	</body>
 </html>

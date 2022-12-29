@@ -1,3 +1,5 @@
+import * as THREE from 'three'
+
 import ViewSystem from './system/viewSystem.js'
 import MoveSystem from './system/moveSystem.js'
 
@@ -29,18 +31,44 @@ const FPS = (canvasCtx) => {
 }
 
 export default class TheWorld {
-	constructor({ selector }) {
-		this.canvasCtx = document.querySelector(selector).getContext('2d')
-		this.fps = FPS(this.canvasCtx)
+	constructor({ type, camera, sceneSize, containerSelector }) {
 		this.keydowns = {}
 		this.keyboardEventsTable = {}
+
+		this.scene = new THREE.Scene()
+		this.camera = new THREE.PerspectiveCamera(
+			camera.fov,
+			camera.aspect,
+			camera.near,
+			camera.far
+		)
+		this.renderer = new THREE.WebGLRenderer()
+		this.canvasCtx = this.init3d(containerSelector)
+		this.fps = FPS(this.canvasCtx)
+
 		this.viewSystem = new ViewSystem(this.canvasCtx)
 		this.moveSystem = new MoveSystem(
 			this.canvasCtx,
 			this.registerKeyboardEvents
 		)
+
 		this.cacheKeydown()
-		this.start()
+		this.animate()
+	}
+
+	init3d(containerSelector) {
+		this.renderer.setClearColor('#f5deb3', 1)
+		this.renderer.setSize(window.innerWidth, window.innerHeight)
+		document
+			.querySelector(containerSelector)
+			.appendChild(this.renderer.domElement)
+
+		const geometry = new THREE.BoxGeometry(1, 1, 1)
+		const material = new THREE.MeshLambertMaterial({ color: 0xffff00 })
+		const cube = new THREE.Mesh(geometry, material)
+		this.scene.add(cube)
+		this.camera.position.z = 5
+		return this.renderer.domElement.getContext('webgl')
 	}
 
 	cacheKeydown() {
@@ -89,21 +117,22 @@ export default class TheWorld {
 		)
 	}
 
-	start = (TIME) => {
+	animate = (TIME) => {
 		// think 如果利用类似react的diff算法重绘canvas性能会更好吗
-		this.clearCanvas()
+		// this.clearCanvas()
 
 		// 键盘事件 （抽出事件系统？）
 		this.watchKeyEvents(this.cacheKeydown)
 
 		// FPS 也许有更好的实现，现在感觉和oop没啥区别
-		this.fps.tick(TIME)
-		this.fps.show()
+		// this.fps.tick(TIME)
+		// this.fps.show()
 
-		this.viewSystem.render()
+		this.renderer.render(this.scene, this.camera)
+		// this.viewSystem.render()
 
 		this.moveSystem.run()
 
-		window.requestAnimationFrame(this.start)
+		window.requestAnimationFrame(this.animate)
 	}
 }
